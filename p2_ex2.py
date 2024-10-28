@@ -40,9 +40,11 @@ st.write("This app explores exoplanets with criteria potentially indicative of h
 
 # Bio Section
 st.header("About Me")
-st.write("""
-I am Feno, a researcher interested in the habitability of exoplanets. This app filters exoplanet data based on criteria like size, orbital period, and host star characteristics to identify planets that could be habitable.
-""")
+st.write("""Here’s a refined description for your app:
+
+---
+
+I am Feno, an MSc student in Astrophysics at the University of Antananarivo, Madagascar. with a focus on exoplanet habitability, This application is designed to filter exoplanet data based on various criteria—such as planet size, orbital period, and characteristics of the host star—to help identify potentially habitable planets.""")
 
 # Load Cleaned Data
 data = pd.read_csv("cleaned_exoplanet_data.csv")
