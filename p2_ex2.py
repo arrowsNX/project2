@@ -5,7 +5,16 @@ Created on Mon Oct 28 08:24:37 2024
 
 @author: feno
 """
-pip install matplotlib
+import subprocess
+import sys
+
+# Install matplotlib if it isn't already installed
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "matplotlib"])
+    import matplotlib.pyplot as plt
+
 
 import streamlit as st
 import matplotlib.pyplot as plt
