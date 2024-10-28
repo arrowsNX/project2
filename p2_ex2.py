@@ -5,8 +5,9 @@ Created on Mon Oct 28 08:24:37 2024
 
 @author: feno
 """
+
 import streamlit as st
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import pandas as pd
 from astroquery.ipac.nexsci.nasa_exoplanet_archive import NasaExoplanetArchive
 
@@ -49,4 +50,41 @@ data = pd.read_csv("cleaned_exoplanet_data.csv")
 st.header("Exoplanet Data Preview")
 st.write(data.head())
 
+# Habitability Filter
+st.header("Potentially Habitable Planets")
 
+
+# Load Cleaned Data
+data = pd.read_csv("cleaned_exoplanet_data.csv")
+
+# Habitability Formula: Define boundaries for habitable zones
+def is_habitable(row):
+    # Stellar flux limits for habitable zone (based on simplified model)
+    flux_inner = 0.75 * (row['st_teff'] / 5778)**2
+    flux_outer = 1.75 * (row['st_teff'] / 5778)**2
+    # Distance calculation in AU
+    distance_au = (row['pl_orbper']**2 * row['st_mass'])**(1/3)
+    row['distance_au'] = distance_au  # Store the distance in AU
+    return flux_inner <= distance_au <= flux_outer and row['pl_rade'] <= 1.6 and row['pl_masse'] <= 5
+
+# Add habitability flag and distance in AU
+data['habitable'] = data.apply(is_habitable, axis=1)
+data['distance_au'] = data.apply(lambda row: (row['pl_orbper']**2 * row['st_mass'])**(1/3), axis=1)
+
+# Plot: Logarithmic scale for Distance from Star (in AU) vs. Star Temperature
+st.header("Log Scale: Distance from Star (AU) vs. Star Temperature")
+fig, ax = plt.subplots()
+habitable = data[data['habitable']]
+non_habitable = data[~data['habitable']]
+
+# Plot habitable and non-habitable planets
+ax.scatter(non_habitable['distance_au'], non_habitable['st_teff'], color="gray", alpha=0.5, label="Non-Habitable")
+ax.scatter(habitable['distance_au'], habitable['st_teff'], color="green", label="Habitable", edgecolor="black")
+
+# Set axes to log scale
+ax.set_xscale("log")
+ax.set_xlabel("Distance from Star (AU, Log Scale)")
+ax.set_ylabel("Star Temperature (K)")
+ax.set_title("Potential Habitability by Distance (AU) and Star Temperature")
+ax.legend()
+st.pyplot(fig)
