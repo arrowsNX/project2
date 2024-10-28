@@ -49,19 +49,4 @@ data = pd.read_csv("cleaned_exoplanet_data.csv")
 st.header("Exoplanet Data Preview")
 st.write(data.head())
 
-# Habitability Filter
-st.header("Potentially Habitable Planets")
-
-# Define Habitability Criteria
-habitable_planets = data[
-    (data['pl_rade'] <= 1.6) &                    # Radius close to Earth's
-    (data['pl_masse'] <= 5) &                     # Mass similar to Earth
-    (data['pl_orbper'] >= 100) & (data['pl_orbper'] <= 500) &  # Reasonable orbital period for habitability
-    (data['st_teff'] >= 2400) & (data['st_teff'] <= 7600)     # Temperature range of host star
-]
-
-st.write("Planets meeting habitability criteria:")
-st.write(habitable_planets)
-
-
 
