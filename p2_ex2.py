@@ -63,6 +63,5 @@ habitable_planets = data[
 st.write("Planets meeting habitability criteria:")
 st.write(habitable_planets)
 
-# Visualization for Habitability Metrics
-st.header("Visualizing Potential Habitability")
+
 
