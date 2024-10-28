@@ -6,7 +6,7 @@ Created on Mon Oct 28 08:24:37 2024
 @author: feno
 """
 import streamlit as st
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 from astroquery.ipac.nexsci.nasa_exoplanet_archive import NasaExoplanetArchive
 
