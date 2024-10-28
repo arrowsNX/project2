@@ -8,7 +8,16 @@ Created on Mon Oct 28 08:24:37 2024
 import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
+from astroquery.ipac.nexsci.nasa_exoplanet_archive import NasaExoplanetArchive
 
+# Fetch exoplanet data
+exoplanet_data = NasaExoplanetArchive.query_criteria(
+    table="ps", 
+    select="pl_name, pl_orbper, pl_rade, pl_masse, st_mass, st_rad, st_teff"
+)
+
+# Save data to CSV
+exoplanet_data.to_pandas().to_csv("exoplanet_data_extended.csv", index=False)
 # Load the raw exoplanet data
 data = pd.read_csv("exoplanet_data_extended.csv")
 
@@ -57,29 +66,3 @@ st.write(habitable_planets)
 # Visualization for Habitability Metrics
 st.header("Visualizing Potential Habitability")
 
-# Orbital Period Distribution (Filtered for Habitability)
-st.subheader("Orbital Period of Potentially Habitable Exoplanets")
-fig, ax = plt.subplots()
-ax.hist(habitable_planets['pl_orbper'].dropna(), bins=15, color="lightblue", edgecolor="black")
-ax.set_xlabel("Orbital Period (days)")
-ax.set_ylabel("Frequency")
-ax.set_title("Distribution of Orbital Periods for Potentially Habitable Planets")
-st.pyplot(fig)
-
-# Radius vs Mass Scatter Plot (Filtered for Habitability)
-st.subheader("Potentially Habitable Planet Radius vs. Mass")
-fig, ax = plt.subplots()
-ax.scatter(habitable_planets['pl_rade'], habitable_planets['pl_masse'], color='green', alpha=0.7)
-ax.set_xlabel("Planet Radius (Earth radii)")
-ax.set_ylabel("Planet Mass (Earth masses)")
-ax.set_title("Radius vs. Mass of Potentially Habitable Planets")
-st.pyplot(fig)
-
-# Star Temperature Distribution (Filtered for Habitability)
-st.subheader("Host Star Effective Temperature of Potentially Habitable Planets")
-fig, ax = plt.subplots()
-ax.hist(habitable_planets['st_teff'].dropna(), bins=10, color="orange", edgecolor="black")
-ax.set_xlabel("Effective Temperature (K)")
-ax.set_ylabel("Frequency")
-ax.set_title("Host Star Temperature for Potentially Habitable Planets")
-st.pyplot(fig)
